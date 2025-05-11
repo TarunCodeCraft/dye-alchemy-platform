@@ -14,7 +14,6 @@ export const AuthForm = ({ isLogin = true }: AuthFormProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [role, setRole] = useState('operator');
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -49,10 +48,10 @@ export const AuthForm = ({ isLogin = true }: AuthFormProps) => {
         : "Your account has been created successfully",
     });
 
-    // Store fake auth state in localStorage
+    // Store fake auth state in localStorage with default role as operator
     localStorage.setItem('dyeOptimizerUser', JSON.stringify({
       email,
-      role,
+      role: 'operator', // Default role is now always operator
       token: 'fake-jwt-token-' + Math.random().toString(36).substring(2)
     }));
 
@@ -103,36 +102,19 @@ export const AuthForm = ({ isLogin = true }: AuthFormProps) => {
           </div>
 
           {!isLogin && (
-            <>
-              <div className="space-y-2">
-                <label htmlFor="confirmPassword" className="text-sm font-medium">
-                  Confirm Password
-                </label>
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  placeholder="••••••••"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label htmlFor="role" className="text-sm font-medium">
-                  Role
-                </label>
-                <select
-                  id="role"
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
-                  className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-dye-primary"
-                >
-                  <option value="operator">Operator</option>
-                  <option value="admin">Administrator</option>
-                </select>
-              </div>
-            </>
+            <div className="space-y-2">
+              <label htmlFor="confirmPassword" className="text-sm font-medium">
+                Confirm Password
+              </label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                placeholder="••••••••"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+            </div>
           )}
 
           <Button type="submit" className="w-full bg-dye-primary hover:bg-dye-secondary">
