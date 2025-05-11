@@ -16,7 +16,6 @@ export interface OptimizationData {
   dyeType: string;
   temperature: number;
   time: number;
-  waterRatio: number;
   ph: number;
   chemicalConcentration: number;
 }
@@ -28,7 +27,6 @@ const OptimizationForm = ({ onSubmit }: OptimizationFormProps) => {
     dyeType: 'reactive',
     temperature: 80,
     time: 60,
-    waterRatio: 8,
     ph: 7,
     chemicalConcentration: 5,
   });
@@ -40,7 +38,7 @@ const OptimizationForm = ({ onSubmit }: OptimizationFormProps) => {
     setFormData((prev) => ({
       ...prev,
       [name]: name === 'fabricWeight' || name === 'temperature' || name === 'time' || 
-              name === 'waterRatio' || name === 'ph' || name === 'chemicalConcentration' 
+              name === 'ph' || name === 'chemicalConcentration' 
                 ? parseFloat(value) 
                 : value,
     }));
@@ -168,24 +166,6 @@ const OptimizationForm = ({ onSubmit }: OptimizationFormProps) => {
                 step={5}
                 value={[formData.time]}
                 onValueChange={(value) => handleSliderChange('time', value)}
-                className="py-4"
-              />
-            </div>
-
-            {/* Water Ratio */}
-            <div className="space-y-2">
-              <label htmlFor="waterRatio" className="text-sm font-medium flex justify-between">
-                <span>Water Ratio</span>
-                <span className="text-dye-primary font-medium">{formData.waterRatio}:1</span>
-              </label>
-              <Slider
-                id="waterRatio"
-                name="waterRatio"
-                min={4}
-                max={15}
-                step={0.5}
-                value={[formData.waterRatio]}
-                onValueChange={(value) => handleSliderChange('waterRatio', value)}
                 className="py-4"
               />
             </div>

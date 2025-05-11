@@ -35,7 +35,7 @@ const predictOptimization = (data: OptimizationData): OptimizationResult => {
   // Calculate simulated values
   let dyeAmount = baseAmount * dyeTypeFactors[dyeType] * machineTypeFactors[machineType];
   dyeAmount = dyeAmount * (1 + (data.temperature - 60) / 100);
-  dyeAmount = dyeAmount * (1 - (data.waterRatio - 8) / 20);
+  // Remove water ratio adjustment
   dyeAmount = Math.max(5, Math.min(50, dyeAmount)); // Keep between 5 and 50
   
   const roi = (100 - dyeAmount) / 20;
@@ -47,7 +47,7 @@ const predictOptimization = (data: OptimizationData): OptimizationResult => {
   
   const environmentalImpact = Math.min(
     90,
-    (dyeAmount / 50) * 50 + (data.waterRatio / 15) * 30 + (data.chemicalConcentration / 20) * 20
+    (dyeAmount / 50) * 50 + (data.chemicalConcentration / 20) * 20
   );
   
   return {
