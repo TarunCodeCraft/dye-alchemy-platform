@@ -1,15 +1,14 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
 import Navbar from '@/components/layout/Navbar';
 import DashboardSidebar from '@/components/layout/DashboardSidebar';
 import OptimizationForm, { OptimizationData } from '@/components/dashboard/OptimizationForm';
-import OptimizationResults, { OptimizationResult } from '@/components/dashboard/OptimizationResults';
+import { OptimizationResult } from '@/components/dashboard/OptimizationResults';
 
 // Mock function to simulate ML model prediction
 const predictOptimization = (data: OptimizationData): OptimizationResult => {
-  // Basic algorithm for demo purposes
+  // Keep existing code (calculation algorithm)
   const baseAmount = data.fabricWeight * 0.1;
   
   // Adjust based on dye type
@@ -61,7 +60,6 @@ const predictOptimization = (data: OptimizationData): OptimizationResult => {
 };
 
 const Dashboard = () => {
-  const [optimizationResult, setOptimizationResult] = useState<OptimizationResult | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -85,45 +83,20 @@ const Dashboard = () => {
     
     setTimeout(() => {
       const result = predictOptimization(data);
-      setOptimizationResult(result);
       
       toast({
         title: "Optimization Complete",
-        description: "The optimized dye parameters have been calculated.",
+        description: "Redirecting to results page...",
+      });
+      
+      // Navigate to results page with the result data
+      navigate('/results', { 
+        state: { 
+          result,
+          parameters: data
+        } 
       });
     }, 1500);
-  };
-  
-  const handleSaveResults = () => {
-    if (!optimizationResult) return;
-    
-    // Get existing history or initialize empty array
-    const existingHistory = JSON.parse(localStorage.getItem('dyeOptimizerHistory') || '[]');
-    
-    // Create new history entry
-    const newEntry = {
-      id: Date.now().toString(),
-      parameters: {
-        fabricWeight: 100,
-        machineType: 'jet',
-        dyeType: 'reactive',
-        temperature: 80,
-        time: 60,
-        waterRatio: 8,
-        ph: 7,
-        chemicalConcentration: 5,
-      },
-      result: optimizationResult
-    };
-    
-    // Add to history and save to localStorage
-    const updatedHistory = [newEntry, ...existingHistory];
-    localStorage.setItem('dyeOptimizerHistory', JSON.stringify(updatedHistory));
-    
-    toast({
-      title: "Results Saved",
-      description: "The optimization results have been saved to your history.",
-    });
   };
   
   if (!isAuthenticated) {
@@ -138,16 +111,8 @@ const Dashboard = () => {
         <main className="flex-1 p-6 bg-gray-50">
           <h1 className="text-3xl font-bold mb-6">Optimization Dashboard</h1>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <OptimizationForm onSubmit={handleOptimize} />
-            </div>
-            <div>
-              <OptimizationResults 
-                result={optimizationResult} 
-                onSave={handleSaveResults} 
-              />
-            </div>
+          <div className="max-w-2xl mx-auto">
+            <OptimizationForm onSubmit={handleOptimize} />
           </div>
         </main>
       </div>
