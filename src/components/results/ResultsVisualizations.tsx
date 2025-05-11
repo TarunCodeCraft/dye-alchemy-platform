@@ -18,7 +18,8 @@ import {
   PolarGrid,
   PolarAngleAxis,
   PolarRadiusAxis,
-  Radar
+  Radar,
+  TooltipProps
 } from 'recharts';
 import { ChartContainer } from '@/components/ui/chart';
 import { OptimizationResult } from '@/components/dashboard/OptimizationResults';
@@ -83,6 +84,14 @@ const ResultsVisualizations = ({ result, roiInRupees }: ResultsVisualizationsPro
     },
   ];
 
+  // Custom tooltip formatter function to handle different value types
+  const customTooltipFormatter = (value: any) => {
+    if (typeof value === 'number') {
+      return value.toFixed(2);
+    }
+    return value;
+  };
+
   return (
     <div className="space-y-6">
       <Card>
@@ -100,7 +109,7 @@ const ResultsVisualizations = ({ result, roiInRupees }: ResultsVisualizationsPro
                 <XAxis dataKey="name" />
                 <YAxis yAxisId="left" orientation="left" />
                 <YAxis yAxisId="right" orientation="right" />
-                <Tooltip />
+                <Tooltip formatter={customTooltipFormatter} />
                 <Legend />
                 <Bar yAxisId="left" dataKey="dyeAmount" name="Dye Amount (g/kg)" fill="#8B5CF6" />
                 <Bar yAxisId="right" dataKey="roi" name="ROI (₹)" fill="#33C3F0" />
@@ -134,7 +143,7 @@ const ResultsVisualizations = ({ result, roiInRupees }: ResultsVisualizationsPro
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value) => `${value.toFixed(2)}`} />
+                  <Tooltip formatter={customTooltipFormatter} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -181,7 +190,12 @@ const ResultsVisualizations = ({ result, roiInRupees }: ResultsVisualizationsPro
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" angle={-45} textAnchor="end" height={70} />
                 <YAxis />
-                <Tooltip formatter={(value) => `₹${value.toLocaleString('en-IN')}`} />
+                <Tooltip formatter={(value) => {
+                  if (typeof value === 'number') {
+                    return `₹${value.toLocaleString('en-IN')}`;
+                  }
+                  return value;
+                }} />
                 <Bar dataKey="value" fill="#33C3F0" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
