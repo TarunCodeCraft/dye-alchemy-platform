@@ -125,7 +125,6 @@ const Results = () => {
                 </div>
               </CardContent>
             </Card>
-            
             <ResultsVisualizations result={result} roiInRupees={roiInRupees} />
           </div>
         </main>

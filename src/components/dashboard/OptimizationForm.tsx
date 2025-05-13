@@ -14,6 +14,7 @@ export interface OptimizationData {
   fabricWeight: number;
   machineType: string;
   dyeType: string;
+  fabricType: string; // Add this line
   temperature: number;
   time: number;
   ph: number;
@@ -25,6 +26,7 @@ const OptimizationForm = ({ onSubmit }: OptimizationFormProps) => {
     fabricWeight: 100,
     machineType: 'jet',
     dyeType: 'reactive',
+    fabricType: 'cotton', // Add this line
     temperature: 80,
     time: 60,
     ph: 7,
@@ -90,6 +92,28 @@ const OptimizationForm = ({ onSubmit }: OptimizationFormProps) => {
                 onChange={handleChange}
                 required
               />
+            </div>
+
+            {/* Fabric Type */}
+            <div className="space-y-2">
+              <label htmlFor="fabricType" className="text-sm font-medium">
+                Fabric Type
+              </label>
+              <select
+                id="fabricType"
+                name="fabricType"
+                value={formData.fabricType}
+                onChange={handleChange}
+                className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-dye-primary"
+                required
+              >
+                <option value="cotton">Cotton</option>
+                <option value="polyester">Polyester</option>
+                <option value="silk">Silk</option>
+                <option value="wool">Wool</option>
+                <option value="nylon">Nylon</option>
+                <option value="rayon">Rayon</option>
+              </select>
             </div>
 
             {/* Machine Type */}
