@@ -35,7 +35,7 @@ router.post('/login', async (req, res) => {
     );
     res.send({ token });
   } catch (err) {
-    res.status(400).send({ error: err.message });
+    res.status(400).send({ error: err instanceof Error ? err.message : 'An error occurred' });
   }
 });
 
